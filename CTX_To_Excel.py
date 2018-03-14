@@ -9,10 +9,10 @@ ws1 = wb.active
 ws1.append(['I/O', 'Device ID', 'Description', 'File Name'])
 
 #Define regex patterns
-regexGroup = r"GmmiLinkContextFrameObject\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+"
-regexBit = r"%?[I|Q]\d{3,4}"
-regexDevice = r"GmmiObject\s\"\D+\d{5}\""
-regexDescription = r"\"Desc2\"\s\".+\""
+regexGroup = re.compile(r"GmmiLinkContextFrameObject\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+\s+.+")
+regexBit = re.compile(r"%?[I|Q]\d{3,4}")
+regexDevice = re.compile(r"GmmiObject\s\"(\D+\d{5})\"")
+regexDescription = re.compile(r"\"Desc2\"\s\"{&h22}(.+){&h22}")
 
 #Find and open all .ctx files in current directory
 file_list = glob.glob("*.ctx")
@@ -25,6 +25,7 @@ for file in file_list:
 
     #Declare and initialize variable for list of regex matches
     matchList = re.findall(regexGroup, readList)
+    print(matchList)
 
     listLength = len(matchList)
 
@@ -64,6 +65,6 @@ tab.tableStyleInfo = style
 ws1.add_table(tab)
 
 #Save excel workbook
-print("Code finished successfully.")
+print("Scan complete.")
 wb.save('Practice.xlsx')
 print("Workbook saved.")
